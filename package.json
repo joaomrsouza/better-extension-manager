@@ -1,0 +1,115 @@
+{
+  "name": "extension-manager",
+  "publisher": "joaomrsouza",
+  "displayName": "Extension Manager",
+  "description": "An extension to manage your extensions by workspace.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.78.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension-manager.syncExtensions",
+        "title": "Sync Extensions",
+        "category": "Extension Manager"
+      },
+      {
+        "command": "extension-manager.defineWorkspaceExtensions",
+        "title": "Define Workspace Extensions",
+        "category": "Extension Manager"
+      },
+      {
+        "command": "extension-manager.defineDefaultExtensions",
+        "title": "Define Default Extensions",
+        "category": "Extension Manager"
+      },
+      {
+        "command": "extension-manager.restoreDefaultExtensions",
+        "title": "Restore Default Extensions",
+        "category": "Extension Manager"
+      },
+      {
+        "command": "extension-manager.createGlobalEnvironment",
+        "title": "Create Global Environment",
+        "description": "Create a global environment with the enabled extensions.",
+        "category": "Extension Manager"
+      },
+      {
+        "command": "extension-manager.deleteGlobalEnvironment",
+        "title": "Delete Global Environment",
+        "description": "Delete a global environment.",
+        "category": "Extension Manager"
+      },
+      {
+        "command": "extension-manager.useGlobalEnvironment",
+        "title": "Use Global Environment",
+        "description": "Install extensions from a global environment.",
+        "category": "Extension Manager"
+      },
+      {
+        "command": "extension-manager.debug",
+        "title": "Debug",
+        "category": "Extension Manager"
+      }
+    ],
+    "configuration": {
+      "title": "Extension Manager",
+      "properties": {
+        "extension-manager.workspace": {
+          "title": "Workspace Extensions",
+          "type": "array",
+          "default": [],
+          "description": "Extensions to be installed in the current workspace. For global extensions, use extension-manager.global configuration.",
+          "scope": "window"
+        },
+        "extension-manager.global": {
+          "title": "Global Extensions",
+          "type": "array",
+          "default": [],
+          "description": "Extensions to always be installed. For workspace extensions, use extension-manager.workspace configuration.",
+          "scope": "application"
+        },
+        "extension-manager.environments": {
+          "type": "object",
+          "default": {},
+          "description": "Extensions environments.",
+          "scope": "application"
+        },
+        "extension-manager.default": {
+          "title": "Default Extensions",
+          "type": "array",
+          "default": [],
+          "description": "Your default list of extensions.",
+          "scope": "application"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.78.0",
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
+    "eslint": "^8.39.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "typescript": "^5.0.4",
+    "@vscode/test-electron": "^2.3.0"
+  }
+}
