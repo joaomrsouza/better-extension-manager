@@ -2,7 +2,7 @@
   "name": "extension-manager",
   "publisher": "joaomrsouza",
   "displayName": "Extension Manager",
-  "description": "An extension to manage your extensions by workspace.",
+  "description": "A VSCode extension to manage your extensions.",
   "version": "1.0.0-alpha",
   "engines": {
     "vscode": "^1.78.0"
