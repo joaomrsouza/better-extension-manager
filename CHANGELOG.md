@@ -4,9 +4,9 @@ All notable changes to the "extension-manager" extension will be documented in t
 
 ## [Unreleased]
 
-- [1.0.0-alpha] - 2023-05-29
+- [1.0.0] - 2023-05-29
 
-Alpha release of extensions manager to test.
+Release of extension manager.
 
 ### Added
 

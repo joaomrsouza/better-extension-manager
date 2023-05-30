@@ -89,6 +89,6 @@ The extension settings will define which extensions will be installed and when.
 
 ## Release Notes
 
-### 1.0.0-alpha
+### 1.0.0
 
-Alpha release of extensions manager to test.
+Release of extension manager.
