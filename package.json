@@ -7,6 +7,10 @@
   "engines": {
     "vscode": "^1.78.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joaomrsouza/extension-manager.git"
+  },
   "categories": [
     "Other"
   ],
