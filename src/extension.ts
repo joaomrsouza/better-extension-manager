@@ -214,24 +214,24 @@ export function activate(context: vscode.ExtensionContext) {
     const toInstall = wantedExtension.filter(
       (e) => !installedExtensions.map((ie) => ie.id).includes(e)
     );
-    Promise.all([
-      uninstallExtensions(toUninstall),
-      installExtensions(toInstall),
-    ]).then(([uninstallTask, installTask]) => {
-      if (uninstallTask.executed || installTask.executed) {
-        showMsg(`${contextMsg}: Finished.`);
-        showMsg(
-          `${contextMsg}: Reload VSCode is highly recommended.`,
-          "warning",
-          ["Reload", "Cancel"]
-        )?.then((option) => {
-          if (option === "Reload") {
-            vscode.commands.executeCommand("workbench.action.reloadWindow");
-          }
-        });
-      } else {
-        showMsg(`${contextMsg}: Already up to date.`);
-      }
+
+    uninstallExtensions(toUninstall).then((uninstallTask) => {
+      installExtensions(toInstall).then((installTask) => {
+        if (uninstallTask.executed || installTask.executed) {
+          showMsg(`${contextMsg}: Finished.`);
+          showMsg(
+            `${contextMsg}: Reload VSCode is highly recommended.`,
+            "warning",
+            ["Reload", "Cancel"]
+          )?.then((option) => {
+            if (option === "Reload") {
+              vscode.commands.executeCommand("workbench.action.reloadWindow");
+            }
+          });
+        } else {
+          showMsg(`${contextMsg}: Already up to date.`);
+        }
+      });
     });
   }
 
