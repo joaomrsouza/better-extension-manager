@@ -19,7 +19,7 @@ If you find yourself with many, many (many) extensions, your editor probably wil
 
 Better Extension Manager will always maintain your editor cleaner, with only the extensions you need! Once setted up, just one command to change between workspace, environment or default extensions.
 
-![In action](images/Better Extension Manager Presentation.gif)
+![In action](images/Better-Extension-Manager-Presentation.gif)
 
 ### Commands:
 
