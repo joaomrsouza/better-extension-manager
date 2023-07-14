@@ -1,7 +1,7 @@
 {
-  "name": "extension-manager",
+  "name": "better-extension-manager",
   "publisher": "joaomrsouza",
-  "displayName": "Extension Manager",
+  "displayName": "Better Extension Manager",
   "description": "A VSCode extension to manage your extensions.",
   "icon": "icon.png",
   "version": "1.1.0",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/joaomrsouza/extension-manager.git"
+    "url": "https://github.com/joaomrsouza/better-extension-manager.git"
   },
   "categories": [
     "Other"
@@ -20,78 +20,78 @@
   "contributes": {
     "commands": [
       {
-        "command": "extension-manager.syncExtensions",
+        "command": "better-extension-manager.syncExtensions",
         "title": "Sync Extensions",
-        "category": "Extension Manager"
+        "category": "Better Extension Manager"
       },
       {
-        "command": "extension-manager.defineWorkspaceExtensions",
+        "command": "better-extension-manager.defineWorkspaceExtensions",
         "title": "Define Workspace Extensions",
-        "category": "Extension Manager"
+        "category": "Better Extension Manager"
       },
       {
-        "command": "extension-manager.removeGlobalExtensionsFromWorkspace",
+        "command": "better-extension-manager.removeGlobalExtensionsFromWorkspace",
         "title": "Remove Global Extensions from Workspace",
-        "category": "Extension Manager"
+        "category": "Better Extension Manager"
       },
       {
-        "command": "extension-manager.defineDefaultExtensions",
+        "command": "better-extension-manager.defineDefaultExtensions",
         "title": "Define Default Extensions",
-        "category": "Extension Manager"
+        "category": "Better Extension Manager"
       },
       {
-        "command": "extension-manager.restoreDefaultExtensions",
+        "command": "better-extension-manager.restoreDefaultExtensions",
         "title": "Restore Default Extensions",
-        "category": "Extension Manager"
+        "category": "Better Extension Manager"
       },
       {
-        "command": "extension-manager.createGlobalEnvironment",
+        "command": "better-extension-manager.createGlobalEnvironment",
         "title": "Create Global Environment",
         "description": "Create a global environment with the enabled extensions.",
-        "category": "Extension Manager"
+        "category": "Better Extension Manager"
       },
       {
-        "command": "extension-manager.deleteGlobalEnvironment",
+        "command": "better-extension-manager.deleteGlobalEnvironment",
         "title": "Delete Global Environment",
         "description": "Delete a global environment.",
-        "category": "Extension Manager"
+        "category": "Better Extension Manager"
       },
       {
-        "command": "extension-manager.useGlobalEnvironment",
+        "command": "better-extension-manager.useGlobalEnvironment",
         "title": "Use Global Environment",
         "description": "Install extensions from a global environment.",
-        "category": "Extension Manager"
+        "category": "Better Extension Manager"
       },
       {
-        "command": "extension-manager.debug",
+        "command": "better-extension-manager.debug",
         "title": "Debug",
-        "category": "Extension Manager"
+        "category": "Better Extension Manager"
       }
     ],
     "configuration": {
-      "title": "Extension Manager",
+      "title": "Better Extension Manager",
       "properties": {
-        "extension-manager.workspace": {
+        "better-extension-manager.workspace": {
           "title": "Workspace Extensions",
           "type": "array",
           "default": [],
-          "description": "Extensions to be installed in the current workspace. For global extensions, use extension-manager.global configuration.",
+          "description": "Extensions to be installed in the current workspace. For global extensions, use better-extension-manager.global configuration.",
           "scope": "window"
         },
-        "extension-manager.global": {
+        "better-extension-manager.global": {
           "title": "Global Extensions",
           "type": "array",
           "default": [],
-          "description": "Extensions to always be installed. For workspace extensions, use extension-manager.workspace configuration.",
+          "description": "Extensions to always be installed. For workspace extensions, use better-extension-manager.workspace configuration.",
           "scope": "application"
         },
-        "extension-manager.environments": {
+        "better-extension-manager.environments": {
           "type": "object",
           "default": {},
           "description": "Extensions environments.",
           "scope": "application"
         },
-        "extension-manager.default": {
+        "better-extension-manager.default": {
           "title": "Default Extensions",
           "type": "array",
           "default": [],

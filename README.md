@@ -1,4 +1,4 @@
-# Extension Manager
+# Better Extension Manager
 
 **A VSCode extension to manage extensions.**
 
@@ -15,13 +15,11 @@ If you find yourself with many, many (many) extensions, your editor probably wil
 - **Environment extensions:** Create environments and set extensions to be installed when you select the defined environment.
 - **Default extensions:** Set extensions and install then every time you need.
 
-<!-- ### In action: -->
+### In action:
 
-<!-- Extension Manager will always maintain your editor cleaner, with only the extensions you need! Once setted up, just one command to change between workspace, environment or default extensions. -->
+Better Extension Manager will always maintain your editor cleaner, with only the extensions you need! Once setted up, just one command to change between workspace, environment or default extensions.
 
-<!-- TODO: Add a gif -->
-
-<!-- \!\[feature X\]\(images/feature-x.png\) -->
+![In action](images/Better Extension Manager Presentation.gif)
 
 ### Commands:
 
@@ -75,17 +73,17 @@ $ code -v
 The extension settings will define which extensions will be installed and when.
 
 ### User Settings
-* `extension-manager.global`: List of extension ids that you want to always be installed.
-* `extension-manager.default`: List of extension ids that you want to set as default. You can change to these extensions by running the `Restore Default Extensions` command.
-* `extension-manager.environments`: Object with `[environmentName]: extensionIds[]` format. At any time you can run the `Use Global Environment` command to select the environment you want, so it's easy to change the extensions.
+* `better-extension-manager.global`: List of extension ids that you want to always be installed.
+* `better-extension-manager.default`: List of extension ids that you want to set as default. You can change to these extensions by running the `Restore Default Extensions` command.
+* `better-extension-manager.environments`: Object with `[environmentName]: extensionIds[]` format. At any time you can run the `Use Global Environment` command to select the environment you want, so it's easy to change the extensions.
 
 ### Workspace Settings
 
-* `extension-manager.workspace`: List of extension ids that you want to be installed on the workspace.
+* `better-extension-manager.workspace`: List of extension ids that you want to be installed on the workspace.
 
 ## Known Issues
 
-- While trying to install/uninstall several (100+) extensions at once, it **may** get stuck. A workaround its just execute the command again **after a window reload**. You can follow the resolution in this issue [#1](https://github.com/joaomrsouza/extension-manager/issues/1)
+- While trying to install/uninstall several (100+) extensions at once, it **may** get stuck. A workaround its just execute the command again **after a window reload**. You can follow the resolution in this issue [#1](https://github.com/joaomrsouza/better-extension-manager/issues/1)
 
 ## Release Notes
 
@@ -93,9 +91,9 @@ The extension settings will define which extensions will be installed and when.
 
 #### Fixed
 
-- It may get stuck when trying to resolve extension dependency. Issue [#2](https://github.com/joaomrsouza/extension-manager/issues/2).
+- It may get stuck when trying to resolve extension dependency. Issue [#2](https://github.com/joaomrsouza/better-extension-manager/issues/2).
 - Escaping from the confirmation dialog was not working how it should.
 
 #### Added
 
-- `extension-manager.removeGlobalExtensionsFromWorkspace` command.
+- `better-extension-manager.removeGlobalExtensionsFromWorkspace` command.

@@ -10,7 +10,7 @@ interface TaskResult {
 }
 
 export function activate(context: vscode.ExtensionContext) {
-  const doNotTouchExtensions = ["joaomrsouza.extension-manager"];
+  const doNotTouchExtensions = ["joaomrsouza.better-extension-manager"];
 
   function showMsg(
     msg: string,
@@ -19,17 +19,17 @@ export function activate(context: vscode.ExtensionContext) {
   ) {
     if (type === "error") {
       return vscode.window.showErrorMessage(
-        `Extension Manager: ${msg}`,
+        `Better Extension Manager: ${msg}`,
         ...options
       );
     } else if (type === "warning") {
       return vscode.window.showWarningMessage(
-        `Extension Manager: ${msg}`,
+        `Better Extension Manager: ${msg}`,
         ...options
       );
     } else if (type === "info") {
       return vscode.window.showInformationMessage(
-        `Extension Manager: ${msg}`,
+        `Better Extension Manager: ${msg}`,
         ...options
       );
     }
@@ -146,10 +146,10 @@ export function activate(context: vscode.ExtensionContext) {
         `code --install-extension ${extensions.join(" --install-extension ")}`
       );
       const task = new vscode.Task(
-        { type: "extension-manager" },
+        { type: "better-extension-manager" },
         vscode.TaskScope.Workspace,
         "Installing Extensions",
-        "extension-manager",
+        "better-extension-manager",
         install
       );
       task.isBackground = true;
@@ -189,10 +189,10 @@ export function activate(context: vscode.ExtensionContext) {
         )}`
       );
       const task = new vscode.Task(
-        { type: "extension-manager" },
+        { type: "better-extension-manager" },
         vscode.TaskScope.Workspace,
         "Uninstalling Extensions",
-        "extension-manager",
+        "better-extension-manager",
         uninstall
       );
       task.isBackground = true;
@@ -253,7 +253,7 @@ export function activate(context: vscode.ExtensionContext) {
   }
 
   const cmdDefineDefaultExtensions = vscode.commands.registerCommand(
-    "extension-manager.defineDefaultExtensions",
+    "better-extension-manager.defineDefaultExtensions",
     async () => {
       const option = await confirmDialog(
         "Are you sure you want to define current extensions as default?"
@@ -267,7 +267,7 @@ export function activate(context: vscode.ExtensionContext) {
       ).map((e) => e.id);
 
       vscode.workspace
-        .getConfiguration("extension-manager")
+        .getConfiguration("better-extension-manager")
         .update(
           "default",
           installedExtensions,
@@ -278,7 +278,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   const cmdRestoreDefaultExtensions = vscode.commands.registerCommand(
-    "extension-manager.restoreDefaultExtensions",
+    "better-extension-manager.restoreDefaultExtensions",
     async () => {
       const option = await confirmDialog(
         "Are you sure you want to restore the default extensions?"
@@ -289,7 +289,7 @@ export function activate(context: vscode.ExtensionContext) {
       const extensionsDefaultConfig = Array.from(
         new Set(
           vscode.workspace
-            .getConfiguration("extension-manager")
+            .getConfiguration("better-extension-manager")
             .get<string[]>("default")
         )
       );
@@ -306,7 +306,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   const cmdDefineWorkspaceExtensions = vscode.commands.registerCommand(
-    "extension-manager.defineWorkspaceExtensions",
+    "better-extension-manager.defineWorkspaceExtensions",
     async () => {
       const option = await confirmDialog(
         "Are you sure you want to define current extensions to this workspace?"
@@ -320,7 +320,7 @@ export function activate(context: vscode.ExtensionContext) {
       ).map((e) => e.id);
 
       vscode.workspace
-        .getConfiguration("extension-manager")
+        .getConfiguration("better-extension-manager")
         .update(
           "workspace",
           installedExtensions,
@@ -332,7 +332,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   const cmdRemoveGlobalExtensionsFromWorkspace =
     vscode.commands.registerCommand(
-      "extension-manager.removeGlobalExtensionsFromWorkspace",
+      "better-extension-manager.removeGlobalExtensionsFromWorkspace",
       async () => {
         const option = await confirmDialog(
           "Are you sure you want to remove global extensions from this workspace extension list?"
@@ -342,11 +342,11 @@ export function activate(context: vscode.ExtensionContext) {
         }
 
         const extensionsWorkspaceConfig = vscode.workspace
-          .getConfiguration("extension-manager")
+          .getConfiguration("better-extension-manager")
           .get<string[]>("workspace");
 
         const extensionsGlobalConfig = vscode.workspace
-          .getConfiguration("extension-manager")
+          .getConfiguration("better-extension-manager")
           .get<string[]>("global");
 
         const extensions =
@@ -355,7 +355,7 @@ export function activate(context: vscode.ExtensionContext) {
           ) ?? [];
 
         vscode.workspace
-          .getConfiguration("extension-manager")
+          .getConfiguration("better-extension-manager")
           .update(
             "workspace",
             extensions,
@@ -369,7 +369,7 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
   const cmdSyncExtensions = vscode.commands.registerCommand(
-    "extension-manager.syncExtensions",
+    "better-extension-manager.syncExtensions",
     async () => {
       const option = await confirmDialog(
         "Are you sure you want to sync extensions?"
@@ -379,11 +379,11 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       const extensionsWorkspaceConfig = vscode.workspace
-        .getConfiguration("extension-manager")
+        .getConfiguration("better-extension-manager")
         .get<string[]>("workspace");
 
       const extensionsGlobalConfig = vscode.workspace
-        .getConfiguration("extension-manager")
+        .getConfiguration("better-extension-manager")
         .get<string[]>("global");
 
       const extensions = Array.from(
@@ -401,7 +401,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   const cmdCreateGlobalEnvironment = vscode.commands.registerCommand(
-    "extension-manager.createGlobalEnvironment",
+    "better-extension-manager.createGlobalEnvironment",
     async () => {
       const environmentName = await vscode.window.showInputBox({
         prompt: "Enter the name of the environment",
@@ -418,11 +418,11 @@ export function activate(context: vscode.ExtensionContext) {
       );
 
       const environments = vscode.workspace
-        .getConfiguration("extension-manager")
+        .getConfiguration("better-extension-manager")
         .get("environments", {});
 
       vscode.workspace
-        .getConfiguration("extension-manager")
+        .getConfiguration("better-extension-manager")
         .update(
           "environments",
           { ...environments, [environmentName]: extensions },
@@ -434,10 +434,10 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   const cmdDeleteGlobalEnvironment = vscode.commands.registerCommand(
-    "extension-manager.deleteGlobalEnvironment",
+    "better-extension-manager.deleteGlobalEnvironment",
     async () => {
       const availableEnvironments = vscode.workspace
-        .getConfiguration("extension-manager")
+        .getConfiguration("better-extension-manager")
         .get<Record<string, string[]>>("environments", {});
 
       if (Object.keys(availableEnvironments).length === 0) {
@@ -471,7 +471,7 @@ export function activate(context: vscode.ExtensionContext) {
         });
 
       vscode.workspace
-        .getConfiguration("extension-manager")
+        .getConfiguration("better-extension-manager")
         .update(
           "environments",
           newEnvironments,
@@ -483,10 +483,10 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   const cmdUseGlobalEnvironment = vscode.commands.registerCommand(
-    "extension-manager.useGlobalEnvironment",
+    "better-extension-manager.useGlobalEnvironment",
     async () => {
       const availableEnvironments = vscode.workspace
-        .getConfiguration("extension-manager")
+        .getConfiguration("better-extension-manager")
         .get<Record<string, string[]>>("environments", {});
 
       if (Object.keys(availableEnvironments).length === 0) {
@@ -524,7 +524,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   const cmdDebug = vscode.commands.registerCommand(
-    "extension-manager.debug",
+    "better-extension-manager.debug",
     () => {
       // Built-in extensions
       // packageJSON.isBuiltin
