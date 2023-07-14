@@ -38,6 +38,7 @@ For the extensions list, please refer to **Extension Settings**.
 
 #### Other Commands
 
+- `Remove Global Extensions from Workspace`: Removes all the extensions in `global` user setting from the `workspace` workspace setting.
 - `Define Default Extensions`: Sets a list of the current enabled extensions to the `default` user setting.
 - `Restore Default Extensions`: Install all extensions listed on the `default` user setting, while **uninstall** any other extensions that are installed.
 - `Create Global Environment`: Sets a list of the current enabled extensions to the `environments` user setting with the given name for the environment.
@@ -85,10 +86,16 @@ The extension settings will define which extensions will be installed and when.
 ## Known Issues
 
 - While trying to install/uninstall several (100+) extensions at once, it **may** get stuck. A workaround its just execute the command again **after a window reload**. You can follow the resolution in this issue [#1](https://github.com/joaomrsouza/extension-manager/issues/1)
-- It's possible that when uninstalling extensions it get stuck while trying to resolve the extensions dependencies to uninstall everything correctly. You can follow the resolution in this issue [#2](https://github.com/joaomrsouza/extension-manager/issues/2)
 
 ## Release Notes
 
-### 1.0.0
+### 1.1.0 - 2023-07-14
 
-Release of extension manager.
+#### Fixed
+
+- It may get stuck when trying to resolve extension dependency. Issue [#2](https://github.com/joaomrsouza/extension-manager/issues/2).
+- Escaping from the confirmation dialog was not working how it should.
+
+#### Added
+
+- `extension-manager.removeGlobalExtensionsFromWorkspace` command.

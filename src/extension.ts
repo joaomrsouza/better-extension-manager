@@ -47,7 +47,6 @@ export function activate(context: vscode.ExtensionContext) {
     );
   }
 
-  // TODO: Fazer fluxo de parada se ficar preso
   function resolveDependencies(extensions: vscode.Extension<any>[]) {
     const extList = filterExtensions(extensions).map((e) => ({
       id: e.id,
@@ -59,6 +58,10 @@ export function activate(context: vscode.ExtensionContext) {
 
     const orderedExtList: typeof extList = [];
 
+    const maxTries = extList.length * 2;
+    let tries = 0;
+    let lastListLength = 0;
+
     while (orderedExtList.length !== extList.length) {
       extList.forEach((e) => {
         if (e.canBeUninstalled) {
@@ -67,10 +70,10 @@ export function activate(context: vscode.ExtensionContext) {
 
         let canBeUninstalled = false;
 
-        // ? Posso desinstalar
+        // Conditions to uninstall
 
         if (
-          extList.filter((el) => el.dependencies?.includes(e.id)).length === 0 // Se não for dependência de ninguém: pode
+          extList.filter((el) => el.dependencies?.includes(e.id)).length === 0 // If it's not anyone dependence it can
         ) {
           if (e.extensionPack.length === 0) {
             canBeUninstalled = true;
@@ -81,7 +84,7 @@ export function activate(context: vscode.ExtensionContext) {
                   extList.find((el) => el.id === epId) ?? {
                     canBeUninstalled: true,
                   }
-                ).canBeUninstalled // Se for extensions pack: pode, Se todas as extensões do pack puderem ser desinstaladas: pode
+                ).canBeUninstalled // If it's extensions pack: can, if all of the pack extensions can be uninstalled
             )
           ) {
             canBeUninstalled = true;
@@ -91,7 +94,7 @@ export function activate(context: vscode.ExtensionContext) {
             .filter((el) => el.dependencies?.includes(e.id))
             .every((el) => el.canBeUninstalled)
         ) {
-          // Se for dependência de alguém e todas as extensões que dependem dela puderem ser desinstaladas: pode
+          // If it's anyone dependence and all the dependent extensions can be uninstalled, it can
           canBeUninstalled = true;
         }
 
@@ -111,6 +114,20 @@ export function activate(context: vscode.ExtensionContext) {
           ex.canBeUninstalled = true;
         }
       });
+
+      if (orderedExtList.length === lastListLength) {
+        tries++;
+      }
+
+      if (tries >= maxTries) {
+        showMsg(
+          "It wasn't possible to completely resolve the dependencies! The resolved ones will be uninstalled, please execute the command again after reload or uninstall the remaining extensions manually.",
+          "warning"
+        );
+        return orderedExtList;
+      }
+
+      lastListLength = orderedExtList.length;
     }
     return orderedExtList;
   }
@@ -241,7 +258,7 @@ export function activate(context: vscode.ExtensionContext) {
       const option = await confirmDialog(
         "Are you sure you want to define current extensions as default?"
       );
-      if (option === "No") {
+      if (option !== "Yes") {
         return;
       }
 
@@ -266,7 +283,7 @@ export function activate(context: vscode.ExtensionContext) {
       const option = await confirmDialog(
         "Are you sure you want to restore the default extensions?"
       );
-      if (option === "No") {
+      if (option !== "Yes") {
         return;
       }
       const extensionsDefaultConfig = Array.from(
@@ -294,7 +311,7 @@ export function activate(context: vscode.ExtensionContext) {
       const option = await confirmDialog(
         "Are you sure you want to define current extensions to this workspace?"
       );
-      if (option === "No") {
+      if (option !== "Yes") {
         return;
       }
 
@@ -313,13 +330,51 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
+  const cmdRemoveGlobalExtensionsFromWorkspace =
+    vscode.commands.registerCommand(
+      "extension-manager.removeGlobalExtensionsFromWorkspace",
+      async () => {
+        const option = await confirmDialog(
+          "Are you sure you want to remove global extensions from this workspace extension list?"
+        );
+        if (option !== "Yes") {
+          return;
+        }
+
+        const extensionsWorkspaceConfig = vscode.workspace
+          .getConfiguration("extension-manager")
+          .get<string[]>("workspace");
+
+        const extensionsGlobalConfig = vscode.workspace
+          .getConfiguration("extension-manager")
+          .get<string[]>("global");
+
+        const extensions =
+          extensionsWorkspaceConfig?.filter(
+            (e) => !(extensionsGlobalConfig ?? []).includes(e)
+          ) ?? [];
+
+        vscode.workspace
+          .getConfiguration("extension-manager")
+          .update(
+            "workspace",
+            extensions,
+            vscode.ConfigurationTarget.Workspace
+          );
+
+        showMsg(
+          "Global extensions removed from this workspace extension list."
+        );
+      }
+    );
+
   const cmdSyncExtensions = vscode.commands.registerCommand(
     "extension-manager.syncExtensions",
     async () => {
       const option = await confirmDialog(
         "Are you sure you want to sync extensions?"
       );
-      if (option === "No") {
+      if (option !== "Yes") {
         return;
       }
 
@@ -403,7 +458,7 @@ export function activate(context: vscode.ExtensionContext) {
       const option = await confirmDialog(
         `Are you sure you want to delete the environment "${environmentName}"?`
       );
-      if (option === "No") {
+      if (option !== "Yes") {
         return;
       }
 
@@ -452,7 +507,7 @@ export function activate(context: vscode.ExtensionContext) {
       const option = await confirmDialog(
         `Are you sure you want to use the environment "${environmentName}"?`
       );
-      if (option === "No") {
+      if (option !== "Yes") {
         return;
       }
 
@@ -484,6 +539,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(cmdDefineDefaultExtensions);
   context.subscriptions.push(cmdRestoreDefaultExtensions);
   context.subscriptions.push(cmdDefineWorkspaceExtensions);
+  context.subscriptions.push(cmdRemoveGlobalExtensionsFromWorkspace);
   context.subscriptions.push(cmdSyncExtensions);
   context.subscriptions.push(cmdCreateGlobalEnvironment);
   context.subscriptions.push(cmdDeleteGlobalEnvironment);

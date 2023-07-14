@@ -2,9 +2,24 @@
 
 All notable changes to the "extension-manager" extension will be documented in this file.
 
-## [Unreleased]
+## 1.1.0 - 2023-07-14
 
-- [1.0.0] - 2023-05-29
+### Fixed
+
+- It may get stuck when trying to resolve extension dependency. Issue [#2](https://github.com/joaomrsouza/extension-manager/issues/2).
+- Escaping from the confirmation dialog was not working how it should.
+
+### Added
+
+- `extension-manager.removeGlobalExtensionsFromWorkspace` command.
+
+## 1.0.1 - 2023-06-30
+
+### Fixed
+
+- Eventually installing task wasn't executing after uninstalling extensions.
+
+## 1.0.0 - 2023-05-29
 
 Release of extension manager.
 
