@@ -211,7 +211,7 @@ export function activate(context: vscode.ExtensionContext) {
   }
 
   function getInstalledExtensions() {
-    return [...vscode.extensions.all];
+    return [...vscode.extensions.all].map(e => ({...e, id: e.id.toLowerCase()}));
   }
 
   function manageExtensions(wantedExtension: string[], contextMsg: string) {
@@ -290,7 +290,7 @@ export function activate(context: vscode.ExtensionContext) {
         new Set(
           vscode.workspace
             .getConfiguration("better-extension-manager")
-            .get<string[]>("default")
+            .get<string[]>("default")?.map(e => e.toLowerCase())
         )
       );
 
@@ -343,11 +343,11 @@ export function activate(context: vscode.ExtensionContext) {
 
         const extensionsWorkspaceConfig = vscode.workspace
           .getConfiguration("better-extension-manager")
-          .get<string[]>("workspace");
+          .get<string[]>("workspace")?.map(e => e.toLowerCase());
 
         const extensionsGlobalConfig = vscode.workspace
           .getConfiguration("better-extension-manager")
-          .get<string[]>("global");
+          .get<string[]>("global")?.map(e => e.toLowerCase());
 
         const extensions =
           extensionsWorkspaceConfig?.filter(
@@ -380,11 +380,11 @@ export function activate(context: vscode.ExtensionContext) {
 
       const extensionsWorkspaceConfig = vscode.workspace
         .getConfiguration("better-extension-manager")
-        .get<string[]>("workspace");
+        .get<string[]>("workspace")?.map(e => e.toLowerCase());
 
       const extensionsGlobalConfig = vscode.workspace
         .getConfiguration("better-extension-manager")
-        .get<string[]>("global");
+        .get<string[]>("global")?.map(e => e.toLowerCase());
 
       const extensions = Array.from(
         new Set([
@@ -511,7 +511,7 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
-      const extensions = availableEnvironments[environmentName];
+      const extensions = availableEnvironments[environmentName]?.map(e => e.toLowerCase());
 
       showMsg(
         `Using global environment "${environmentName}". Note that this process may take several minutes depending on the number of extensions to be installed.`
