@@ -1,3 +1,5 @@
+import { existsSync } from "fs";
+import { dirname, join } from "path";
 import * as vscode from "vscode";
 
 // ! LIMITATIONS: ALL EXTENSIONS MUST BE ENABLED
@@ -41,6 +43,61 @@ export function activate(context: vscode.ExtensionContext) {
     });
   }
 
+  function fixPathSpaces(path: string) {
+    const pathSegments = path.split("\\");
+    const fixedPathSegments = pathSegments.map((segment) => {
+      if (segment.includes(" ")) {
+        return `'${segment}'`;
+      }
+      return segment;
+    });
+
+    return fixedPathSegments.join("\\");
+  }
+
+  function getVSCodeCliPath() {
+    const customCLIPath = vscode.workspace
+      .getConfiguration("better-extension-manager")
+      .get<string>("cliPath");
+
+    if (customCLIPath) {
+      return fixPathSpaces(customCLIPath);
+    }
+
+    // const shellPath = vscode.env.shell;
+    const vscodePath = process.execPath;
+    const isWindows = process.platform === "win32";
+
+    if (isWindows) {
+      // On Windows, the CLI executable is 'code.cmd' or 'code.exe'
+      const basePath = dirname(vscodePath);
+      const cliCmd = join(basePath, "bin", "code.cmd");
+      if (existsSync(cliCmd)) {
+        return fixPathSpaces(cliCmd);
+      }
+
+      const cliExe = join(basePath, "bin", "code.exe");
+      if (existsSync(cliExe)) {
+        return fixPathSpaces(cliExe);
+      }
+    } else {
+      // On macOS and Linux, the CLI executable is 'code'
+      const basePath = dirname(dirname(vscodePath));
+      const cli = join(basePath, "bin", "code");
+
+      if (existsSync(cli)) {
+        return cli;
+      }
+    }
+
+    showMsg(
+      "Failed to find the VSCode CLI. Please set a custom path in the settings (better-extension-manager.cliPath).",
+      "error"
+    );
+
+    throw new Error("could not find VSCode CLI path");
+  }
+
   function filterExtensions(extensions: vscode.Extension<any>[]) {
     return extensions.filter(
       (e) => !(e.packageJSON.isBuiltin || doNotTouchExtensions.includes(e.id))
@@ -49,10 +106,14 @@ export function activate(context: vscode.ExtensionContext) {
 
   function resolveDependencies(extensions: vscode.Extension<any>[]) {
     const extList = filterExtensions(extensions).map((e) => ({
-      id: e.id,
+      id: e.id.toLowerCase(),
       extension: e,
-      dependencies: (e.packageJSON.extensionDependencies as string[]) ?? [],
-      extensionPack: (e.packageJSON.extensionPack as string[]) ?? [],
+      dependencies: (
+        (e.packageJSON.extensionDependencies as string[]) ?? []
+      ).map((d) => d.toLowerCase()),
+      extensionPack: ((e.packageJSON.extensionPack as string[]) ?? []).map(
+        (d) => d.toLowerCase()
+      ),
       canBeUninstalled: false,
     }));
 
@@ -143,7 +204,9 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       const install = new vscode.ShellExecution(
-        `code --install-extension ${extensions.join(" --install-extension ")}`
+        `${getVSCodeCliPath()} --install-extension ${extensions.join(
+          " --install-extension "
+        )}`
       );
       const task = new vscode.Task(
         { type: "better-extension-manager" },
@@ -184,7 +247,7 @@ export function activate(context: vscode.ExtensionContext) {
       );
 
       const uninstall = new vscode.ShellExecution(
-        `code --uninstall-extension ${toUninstall.join(
+        `${getVSCodeCliPath()} --uninstall-extension ${toUninstall.join(
           " --uninstall-extension "
         )}`
       );
@@ -211,7 +274,10 @@ export function activate(context: vscode.ExtensionContext) {
   }
 
   function getInstalledExtensions() {
-    return [...vscode.extensions.all].map(e => ({...e, id: e.id.toLowerCase()}));
+    return [...vscode.extensions.all].map((e) => ({
+      ...e,
+      id: e.id.toLowerCase(),
+    }));
   }
 
   function manageExtensions(wantedExtension: string[], contextMsg: string) {
@@ -237,13 +303,12 @@ export function activate(context: vscode.ExtensionContext) {
         if (uninstallTask.executed || installTask.executed) {
           showMsg(`${contextMsg}: Finished.`);
           showMsg(
-            `${contextMsg}: Reload VSCode is highly recommended.`,
-            "warning",
-            ["Reload", "Cancel"]
-          )?.then((option) => {
-            if (option === "Reload") {
-              vscode.commands.executeCommand("workbench.action.reloadWindow");
-            }
+            `${contextMsg}: Restarting VSCode extension host.`,
+            "warning"
+          )?.then(() => {
+            vscode.commands.executeCommand(
+              "workbench.action.restartExtensionHost"
+            );
           });
         } else {
           showMsg(`${contextMsg}: Already up to date.`);
@@ -290,7 +355,8 @@ export function activate(context: vscode.ExtensionContext) {
         new Set(
           vscode.workspace
             .getConfiguration("better-extension-manager")
-            .get<string[]>("default")?.map(e => e.toLowerCase())
+            .get<string[]>("default")
+            ?.map((e) => e.toLowerCase())
         )
       );
 
@@ -343,11 +409,13 @@ export function activate(context: vscode.ExtensionContext) {
 
         const extensionsWorkspaceConfig = vscode.workspace
           .getConfiguration("better-extension-manager")
-          .get<string[]>("workspace")?.map(e => e.toLowerCase());
+          .get<string[]>("workspace")
+          ?.map((e) => e.toLowerCase());
 
         const extensionsGlobalConfig = vscode.workspace
           .getConfiguration("better-extension-manager")
-          .get<string[]>("global")?.map(e => e.toLowerCase());
+          .get<string[]>("global")
+          ?.map((e) => e.toLowerCase());
 
         const extensions =
           extensionsWorkspaceConfig?.filter(
@@ -380,11 +448,13 @@ export function activate(context: vscode.ExtensionContext) {
 
       const extensionsWorkspaceConfig = vscode.workspace
         .getConfiguration("better-extension-manager")
-        .get<string[]>("workspace")?.map(e => e.toLowerCase());
+        .get<string[]>("workspace")
+        ?.map((e) => e.toLowerCase());
 
       const extensionsGlobalConfig = vscode.workspace
         .getConfiguration("better-extension-manager")
-        .get<string[]>("global")?.map(e => e.toLowerCase());
+        .get<string[]>("global")
+        ?.map((e) => e.toLowerCase());
 
       const extensions = Array.from(
         new Set([
@@ -511,7 +581,9 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
-      const extensions = availableEnvironments[environmentName]?.map(e => e.toLowerCase());
+      const extensions = availableEnvironments[environmentName]?.map((e) =>
+        e.toLowerCase()
+      );
 
       showMsg(
         `Using global environment "${environmentName}". Note that this process may take several minutes depending on the number of extensions to be installed.`
