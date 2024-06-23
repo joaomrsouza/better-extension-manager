@@ -13,7 +13,7 @@ If you find yourself with many, many (many) extensions, your editor probably wil
 - **Global extensions:** Set extensions to always be installed in your editor.
 - **Workspace extensions:** Set extensions to be installed by the current workspace.
 - **Environment extensions:** Create environments and set extensions to be installed when you select the defined environment.
-- **Default extensions:** Set extensions and install then every time you need.
+- ~~**Default extensions:** Set extensions and install then every time you need.~~ (deprecated, see [CHANGELOG.md](CHANGELOG.md))
 
 ### In action:
 
@@ -37,8 +37,8 @@ For the extensions list, please refer to **Extension Settings**.
 #### Other Commands
 
 - `Remove Global Extensions from Workspace`: Removes all the extensions in `global` user setting from the `workspace` workspace setting.
-- `Define Default Extensions`: Sets a list of the current enabled extensions to the `default` user setting.
-- `Restore Default Extensions`: Install all extensions listed on the `default` user setting, while **uninstall** any other extensions that are installed.
+- ~~`Define Default Extensions`: Sets a list of the current enabled extensions to the `default` user setting.~~ (deprecated, see [CHANGELOG.md](CHANGELOG.md))
+- ~~`Restore Default Extensions`: Install all extensions listed on the `default` user setting, while **uninstall** any other extensions that are installed.~~ (deprecated, see [CHANGELOG.md](CHANGELOG.md))
 - `Create Global Environment`: Sets a list of the current enabled extensions to the `environments` user setting with the given name for the environment.
 - `Delete Global Environment`: Remove the environment with the given name of the `environments` user setting.
 - `Use Global Environment`: Install all extensions listed on the `environments` user setting with the given name, while **uninstall** any other extensions that are installed.
@@ -68,6 +68,8 @@ If you want to have sure it is working just type the command bellow on your term
 $ code -v
 ```
 
+Otherwise you can set the path to the VSCode CLI in the `better-extension-manager.cliPath` user setting.
+
 ## Extension Settings
 
 The extension settings will define which extensions will be installed and when.
@@ -76,6 +78,7 @@ The extension settings will define which extensions will be installed and when.
 * `better-extension-manager.global`: List of extension ids that you want to always be installed.
 * `better-extension-manager.default`: List of extension ids that you want to set as default. You can change to these extensions by running the `Restore Default Extensions` command.
 * `better-extension-manager.environments`: Object with `[environmentName]: extensionIds[]` format. At any time you can run the `Use Global Environment` command to select the environment you want, so it's easy to change the extensions.
+* `better-extension-manager.cliPath`: Path to the VSCode CLI. When empty (""), the extension will try to automatically determine the CLI Path.
 
 ### Workspace Settings
 
@@ -85,15 +88,30 @@ The extension settings will define which extensions will be installed and when.
 
 - While trying to install/uninstall several (100+) extensions at once, it **may** get stuck. A workaround its just execute the command again **after a window reload**. You can follow the resolution in this issue [#1](https://github.com/joaomrsouza/better-extension-manager/issues/1)
 
-## Release Notes
+## Last Release Notes
 
-### 1.1.0 - 2023-07-14
+For more info on releases, refer to the [CHANGELOG.md](CHANGELOG.md) file.
 
-#### Fixed
+## 1.2.0 - 2024-06-23
 
-- It may get stuck when trying to resolve extension dependency. Issue [#2](https://github.com/joaomrsouza/better-extension-manager/issues/2).
-- Escaping from the confirmation dialog was not working how it should.
+### Added
 
-#### Added
+-  Added `better-extension-manager.cliPath` user setting to define the path to the VSCode CLI. This is useful when the VSCode CLI is not available in the default directory.
 
-- `better-extension-manager.removeGlobalExtensionsFromWorkspace` command.
+### Changed
+
+- When syncing extensions, it will automatically restart VSCode extension host to apply changes. Before, it would ask for a full reload.
+
+### Fixed
+
+- Fixed an issue while uninstalling extensions where the dependencies were not being resolved correctly due to case sensitive comparison, resulting in error.
+
+### Deprecated
+
+- The `better-extension-manager.defineDefaultExtensions` and `better-extension-manager.restoreDefaultExtensions` commands are deprecated. Use `better-extension-manager.environments` instead.
+
+For easy migrating you can just execute the `better-extension-manager.restoreDefaultExtensions` and `better-extension-manager.createGlobalEnvironment` respectively, or simply copy the configuration from the `better-extension-manager.default` setting to the `better-extension-manager.environments` setting.
+
+### Other
+
+- Updated dependencies.

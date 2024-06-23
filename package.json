@@ -4,7 +4,7 @@
   "displayName": "Better Extension Manager",
   "description": "A VSCode extension to manage your extensions.",
   "icon": "icon.png",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "engines": {
     "vscode": "^1.78.0"
   },
@@ -36,12 +36,12 @@
       },
       {
         "command": "better-extension-manager.defineDefaultExtensions",
-        "title": "Define Default Extensions",
+        "title": "Define Default Extensions (deprecated, use environments instead)",
         "category": "Better Extension Manager"
       },
       {
         "command": "better-extension-manager.restoreDefaultExtensions",
-        "title": "Restore Default Extensions",
+        "title": "Restore Default Extensions (deprecated, use environments instead)",
         "category": "Better Extension Manager"
       },
       {
@@ -97,6 +97,13 @@
           "default": [],
           "description": "Your default list of extensions.",
           "scope": "application"
+        },
+        "better-extension-manager.cliPath": {
+          "title": "Custom CLI Path",
+          "type": "string",
+          "default": "",
+          "description": "The absolute path to the VSCode CLI executable. Leave it empty, the extension will try to find it automatically.",
+          "scope": "application"
         }
       }
     }
@@ -110,16 +117,16 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@types/vscode": "^1.78.0",
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.1",
-    "@types/node": "16.x",
-    "@typescript-eslint/eslint-plugin": "^5.59.1",
-    "@typescript-eslint/parser": "^5.59.1",
-    "eslint": "^8.39.0",
-    "glob": "^8.1.0",
+    "@types/node": "^20.14.8",
+    "@types/vscode": "^1.78.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.1",
+    "@typescript-eslint/parser": "^7.13.1",
+    "@vscode/test-electron": "^2.3.0",
+    "eslint": "^9.5.0",
+    "glob": "^10.4.2",
     "mocha": "^10.2.0",
-    "typescript": "^5.0.4",
-    "@vscode/test-electron": "^2.3.0"
+    "typescript": "^5.0.4"
   }
 }
